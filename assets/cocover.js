@@ -20,19 +20,27 @@
     alpha = alpha + alpha.toUpperCase();
     var number = '1234569890';
 
-    function over (selector) {
+    cocoClass = getClass();
+
+    function over (selector, options) {
         selector = $(selector);
         if (!selector.length) {
             return;
         }
 
-        if (typeof cocoClass === 'undefined') {
-            cocoClass = getClass();
+        options = $.extend({'cocoClass': null}, options);
+
+        if (options.cocoClass) {
+            cocoClass = options.cocoClass;
         }
+
         cocover.cocoClass = cocover.cocoClass || cocoClass;
 
         selector.addClass(cocoClass);
-        createSpan(selector);
+        if (!options.cocoClass) {
+            createSpan(selector);
+            console.log('hi');
+        }
         styleSpan();
     }
 
@@ -115,7 +123,7 @@
     }
 
     function start () {
-        if (!cocoClass || $(document.head).find('#' + cocoClass + '-start').length) {
+        if (!cocoClass || $('#' + cocoClass + '-start').length) {
             return;
         }
 
@@ -134,7 +142,7 @@
     }
 
     function stop () {
-        $(document.head).find('#' + cocoClass + '-start').remove();
+        $('#' + cocoClass + '-start').remove();
     }
 
     cocover.over = over;
@@ -143,13 +151,13 @@
     cocover.destroy = destroy;
     cocover.cocoClass = cocoClass || '';
 
-    $.fn.cocover = function (m) {
+    $.fn.cocover = function (m, options) {
         if (! (m in cocover) || typeof cocover[m] !== 'function') {
             return this;
         }
 
         if (m === 'over') {
-            cocover.over(this);
+            cocover.over(this, options);
         } 
 
         else if (m === 'destroy') {

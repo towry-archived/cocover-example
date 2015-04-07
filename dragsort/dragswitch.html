@@ -1022,8 +1022,11 @@
     </div>
     
     <script src="../assets/jquery-1.8.3.min.js"></script>
-    <script src="../assets/jquery-ui.js"></script>
-    <script src="../assets/cocover.js"></script>
-    <script src="app.js"></script>
+    <script src="../assets/jquery.dragswitch.min.js"></script>
+    <script>
+    $('.list').dragswitch(function (drag) {
+      drag('.item');
+    });
+    </script>
 </body>
 </html>

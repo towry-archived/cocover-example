@@ -1,40 +1,46 @@
 (function ($) {
     var items = $('.item');
+    var spans = $('.cococlass-span');
+
     var beneath = null;
     var drag = null;
 
     items.draggable();
 
-    items.hover(function () {
-        if (drag) {
-            beneath = $(this);
+    $('.list').on('mouseenter mouseleave', '.cococlass-span', function (e) {
+        var a = $(this).closest('.item');
+        if (e.type === 'mouseenter') {
+            a.addClass('hover');
+            if (drag) {
+                beneath = a;
+            }
+        } else {
+            a.removeClass('hover');
+            if (drag) {
+                beneath = null;
+            }
         }
-        $(this).addClass('hover');
+    })
 
-    }, function () {
-        if (drag) {
-            beneath = null;
-        }
-        $(this).removeClass('hover');
-    });
-    
-    items.on('mousedown', function (e) {
+    function mousedownHandler (e) {
         e.preventDefault();
 
         drag = $(this);
-        drag.cocover('destroy').css('z-index', '999');
+        drag.css('z-index', '999').find('.cococlass-span').css('display', 'none');
         drag.removeClass('hover');
 
         cocover.start();
-    });
+    }
+    $(".list").on('mousedown', '.item', mousedownHandler);
 
 
     $(document).on('mouseup', function (e) {
+        cocover.stop();
         if (!drag) {
             return;
         }
 
-        drag.cocover('over').css('z-index', '');
+        drag.css('z-index', '').find('.cococlass-span').css('display', '');
 
         if (!beneath) {
             drag.attr('style', 'position: relative');
@@ -57,11 +63,10 @@
         // so it's can fit into the flow automatically
         drag.attr('style', 'position: relative');
 
-        cocover.stop();
         drag = null;
         beneath = null;
     });
 
     // begin
-    items.cocover('over');
+    items.cocover('over', {cocoClass: 'cococlass'});
 }(jQuery));
